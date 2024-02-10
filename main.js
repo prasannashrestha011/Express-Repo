@@ -27,12 +27,7 @@ app.get('/',(req,res)=>{
    
 });
     // query request 
-app.get('/users',
-query('filter')
-.isString().withMessage("The filter will only accept string ")
-.notEmpty().withMessage("The filter should not be empty")
-.isLength({min:3,max:10}).withMessage("The character must be between 3-10 characters")
-,(req,res)=>{
+app.get('/users',checkSchema(schema),(req,res)=>{
     const errors=validationResult(req);
     if(errors.isEmpty()) return res.status(400).send(errors.array())
     console.log(errors) 
@@ -82,7 +77,6 @@ app.get('/grades',(req,res)=>{
         ]
     )
 })
-
 
 // put request method
 app.put('/users/:id',logMiddleware,(req,res)=>{
