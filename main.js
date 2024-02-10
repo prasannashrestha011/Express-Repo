@@ -4,6 +4,7 @@ app.use(express.json())
 const PORT=3000
 const {query,validationResult,body,matchedData,checkSchema}=require('express-validator')
 const schema=require('./utils/schema.js')
+const querySchema=require('./utils/query.js')
 // Defining a middlware function 
 const logMiddleware=(req,res,next)=>{
     const ID=parseInt(req.params.id);
@@ -27,7 +28,7 @@ app.get('/',(req,res)=>{
    
 });
     // query request 
-app.get('/users',checkSchema(schema),(req,res)=>{
+app.get('/users',checkSchema(querySchema),(req,res)=>{
     const errors=validationResult(req);
     if(errors.isEmpty()) return res.status(400).send(errors.array())
     console.log(errors) 
