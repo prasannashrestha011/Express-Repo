@@ -2,7 +2,8 @@ const express= require('express')
 const app=express()
 app.use(express.json())
 const PORT=3000
-const {query,validationResult,body}=require('express-validator')
+const {query,validationResult,body,matchedData,checkSchema}=require('express-validator')
+const schema=require('./utils/schema.js')
 // Defining a middlware function 
 const logMiddleware=(req,res,next)=>{
     const ID=parseInt(req.params.id);
@@ -33,7 +34,11 @@ query('filter')
 .isLength({min:3,max:10}).withMessage("The character must be between 3-10 characters")
 ,(req,res)=>{
     const errors=validationResult(req);
-    console.log(errors)
+    if(errors.isEmpty()) return res.status(400).send(errors.array())
+    console.log(errors) 
+
+    const Data= matchedData(req);
+    console.log(Data)
     const filter=req.query.filter;
     const value=req.query.value;
     console.log(filter)
@@ -55,20 +60,15 @@ app.get('/users/:id',logMiddleware,(req,res)=>{
 
 })
 // post method
-app.post('/users',[ // validator
-body('user').notEmpty().withMessage("The userName should not be empty")
-.isString().withMessage("The username should be in string form")
-.isLength({min:5,max:32}).withMessage("The username character should be in a range of 5-32"),
-body('address').isString().withMessage('The address should be a string')
-.isLength({min:3,max:32}).withMessage("The address character should be in a range of 3-32")
-
-]
-,(req,res)=>{
+app.post('/users', checkSchema(schema),(req,res)=>{
     const Error=validationResult(req)
+    const Data= req.body
+    
+    console.log(Data)
+    if(!Error.isEmpty()) return res.status(400).send(Error.array())
     console.log(Error)
-    const data=req.body
-    console.log(data)
-    const newUser={ id:userLOG[userLOG.length-1].id+1,...req.body}
+ 
+    const newUser={ id:userLOG[userLOG.length-1].id+1,...Data}
     userLOG.push(newUser);
     return res.send(newUser)
     res.send('Data successfully received')
