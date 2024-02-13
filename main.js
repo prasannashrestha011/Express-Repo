@@ -56,14 +56,13 @@ app.use('/user/auth',passport.authenticate('local'),(req,res)=>{
 
 
 // session
-app.get('/world',(req,res)=>{
-    console.log(req.sessionID)
-    console.log(req.session)
-    req.session.authentication=true
-    res.cookie('Hello','World',{maxAge:60000*60*2,signed:true})
-    console.log(req.cookies)
-    res.send('Cookie set')
-})
+app.use(session({
+    secret: 'coder-session',
+    resave: false,
+    saveUninitialized: false
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 app.get('/create',(req,res)=>{
     const sessionID=req.session.id
     console.log(sessionID)
