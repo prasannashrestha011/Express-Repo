@@ -1,7 +1,7 @@
 const userLOG = [
-    { id: 1, user: "ram", address: "Bhaktapur" },
-    { id: 2, user: "sita", address: "Kathmandu" },
-    { id: 3, user: "hari", address: "Palpa" }
+    { id: 1, username: "ram", password: "ram123" },
+    { id: 2, username: "sita", password: "sita123" },
+    { id: 3, username: "hari", password: "hari123" }
 ];
 
 module.exports = userLOG;

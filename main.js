@@ -8,7 +8,11 @@ app.use(session({
     secret:"Hello123",
     saveUninitialized:false,
     resave:false
-})) /// global decleration of session ID, it will assign the session id to the new http request automatically
+})) 
+const passport=require('passport')
+const strategy=require('passport-local')
+require('./utils/strategy/authentication.js')
+
 
 const {query,validationResult,body,matchedData,checkSchema}=require('express-validator')
 const schema=require('./utils/schema.js')
@@ -19,6 +23,9 @@ const Routes=require('./utils/routes/rootroute.js')
 const logMiddleware=require('./utils/middleware.js')//middleware function 
 const userLOG=require('./utils/static.js') // users details
 app.use(parsecookie('HelloWorld')); // Use cookie-parser middleware
+// passport middleware//
+
+
 app.get('/world',(req,res)=>{
     console.log(req.sessionID)
     console.log(req.session)
