@@ -4,7 +4,7 @@ app.use(express.json())
 const PORT=3000
 // database
 const mongoose=require('mongoose')
-const userSchema=require('./utils/mongodb/mongodb/schema.js')
+const userSchema=require('./utils/mongodb/schema/schema.js')
 mongoose.connect('mongodb://localhost:27017/UsersData').then(()=>{
     console.log("Data base has been executed")
 }).catch((err)=>{
