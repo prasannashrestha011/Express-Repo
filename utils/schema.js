@@ -1,31 +1,27 @@
-const schema={
-    user:{
+const Schema={
+    username:{
         isLength:{
-            option:{
-                min:5,
-                max:32,
-            }
-        },
-        isString:{
-            errorMessage:" info should be in string form"
+            options:{
+                max:15,
+                min:2
+            },
+            errorMessage:"User character should be in a range of 2 to 15"
         },
         notEmpty:{
-            errorMessage:" info should not be empty"
+            errorMessage:"Username should not be empty"
         }
     },
-    address:{
+    password:{
         isLength:{
-            option:{
-                min:3,
-                max:32
-            }
-        },
-        isString:{
-            errorMessage:" Address should be in a string form"
+            options:{
+                max:12,
+                min:3
+            },
+            errorMessage:"Please fill out the password box"
         },
         notEmpty:{
-            errorMessage:" Please insert you address"
+            errorMessage:"Please insert your password"
         }
     }
 }
-module.exports= schema
+module.exports=Schema

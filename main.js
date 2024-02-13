@@ -2,6 +2,31 @@ const express= require('express')
 const app=express()
 app.use(express.json())
 const PORT=3000
+// database
+const mongoose=require('mongoose')
+const userSchema=require('./utils/mongodb/mongodb/schema.js')
+mongoose.connect('mongodb://localhost:27017/UsersData').then(()=>{
+    console.log("Data base has been executed")
+}).catch((err)=>{
+    console.log(err)
+})
+app.post('/create',async(req,res)=>{
+    try{
+        const { body} = req;
+        const newUser = new userSchema(body);
+        const saveUser = await newUser.save();
+        
+        console.log(saveUser)
+        res.send('data saved to database')
+    }
+    catch(err){
+        console.log(err)
+        res.sendStatus(400)
+    }
+})
+
+
+//
 const parsecookie=require('cookie-parser')
 const session=require('express-session')
 app.use(session({
@@ -9,6 +34,7 @@ app.use(session({
     saveUninitialized:false,
     resave:false
 })) 
+
 const passport=require('passport')
 const strategy=require('passport-local')
 require('./utils/strategy/authentication.js')
@@ -24,8 +50,12 @@ const logMiddleware=require('./utils/middleware.js')//middleware function
 const userLOG=require('./utils/static.js') // users details
 app.use(parsecookie('HelloWorld')); // Use cookie-parser middleware
 // passport middleware//
+app.use('/user/auth',passport.authenticate('local'),(req,res)=>{
+    res.send('User has been authenticated')
+})
 
 
+// session
 app.get('/world',(req,res)=>{
     console.log(req.sessionID)
     console.log(req.session)
@@ -39,6 +69,7 @@ app.get('/create',(req,res)=>{
     console.log(sessionID)
     res.send(`Your session ID has been created ${sessionID}` )
 })
+// mutiple routes
  app.use(Routes)
 
 app.delete('/users/:id',logMiddleware,(req,res)=>{
